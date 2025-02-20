@@ -20,7 +20,7 @@ public class Conexion {
     String url = "jdbc:mysql://localhost:3306";
     String nombreBD = "Tareas";
     String usuario = "root";
-    String contra = "root";
+    String contra = "56234512";
     String driver = "com.mysql.jdbc.Driver";
 
     Connection conexion = null;

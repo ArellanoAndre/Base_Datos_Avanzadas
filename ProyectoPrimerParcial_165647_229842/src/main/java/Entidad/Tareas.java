@@ -18,6 +18,20 @@ public class Tareas {
     Date fechaEntrega;
     Boolean entregada;
 
+    public Tareas(String nombreAsignatura, String tarea) {
+        this.nombreAsignatura = nombreAsignatura;
+        this.tarea = tarea;
+    }
+
+    public Tareas(String nombreAsignatura, String tarea, Date fechaEntrega) {
+        this.nombreAsignatura = nombreAsignatura;
+        this.tarea = tarea;
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public Tareas() {
+    }
+
     public Tareas(int idTarea, String nombreAsignatura, String tarea, Date fechaEntrega, Boolean entregada) {
         this.idTarea = idTarea;
         this.nombreAsignatura = nombreAsignatura;

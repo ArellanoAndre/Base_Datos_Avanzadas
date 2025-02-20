@@ -6,6 +6,8 @@ package Presentacion;
 
 import Entidad.Tareas;
 import conexion.Conexion;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +33,8 @@ public class frmTareas extends javax.swing.JFrame {
         initComponents();
         c = new Conexion();
         this.llenarTabla();
+        this.setTitle("Programa Gestor de Tareas Ing. Ochoa  e Ing. Arellano");
+        this.setResizable(false); // Desactiva la redimensión
     }
 
     /**
@@ -41,30 +46,41 @@ public class frmTareas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        lblId = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
+        Fondo = new javax.swing.JPanel();
+        EtiquetaID = new javax.swing.JLabel();
+        ID = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TablaTareas = new javax.swing.JTable();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnMarcar = new javax.swing.JButton();
-        lblNombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        lblTarea = new javax.swing.JLabel();
-        txtTarea = new javax.swing.JTextField();
-        lblFecha = new javax.swing.JLabel();
-        txtFecha = new javax.swing.JTextField();
-        btnCancelar = new javax.swing.JButton();
+        EtiquetaNombre = new javax.swing.JLabel();
+        Nombre = new javax.swing.JTextField();
+        EtiquetaTarea = new javax.swing.JLabel();
+        Tarea = new javax.swing.JTextField();
+        EtiquetaFecha = new javax.swing.JLabel();
+        Fecha = new javax.swing.JTextField();
+        btnSalir = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnCancelar1 = new javax.swing.JButton();
+        EtiquetaGestorTareas = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblId.setText("ID");
+        Fondo.setBackground(new java.awt.Color(0, 51, 102));
 
-        txtId.setEditable(false);
+        EtiquetaID.setFont(new java.awt.Font("Roboto Medium", 2, 18)); // NOI18N
+        EtiquetaID.setText("ID");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        ID.setEditable(false);
+        ID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IDActionPerformed(evt);
+            }
+        });
+
+        TablaTareas.setBackground(new java.awt.Color(153, 153, 255));
+        TablaTareas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -72,137 +88,263 @@ public class frmTareas extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Asignatura", "Tarea", "Fecha Entregada"
+                "ID", "Asignatura", "Tarea", "Fecha De Entrega"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TablaTareas);
 
+        btnEditar.setBackground(new java.awt.Color(255, 255, 51));
         btnEditar.setText("Editar");
 
+        btnEliminar.setBackground(new java.awt.Color(255, 0, 0));
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
+        btnMarcar.setBackground(new java.awt.Color(0, 255, 51));
         btnMarcar.setText("Marcar Terminada");
 
-        lblNombre.setText("Nombre Asignatura");
+        EtiquetaNombre.setFont(new java.awt.Font("Roboto Medium", 2, 18)); // NOI18N
+        EtiquetaNombre.setText("Nombre Asignatura");
 
-        lblTarea.setText("Tarea");
-
-        txtTarea.addActionListener(new java.awt.event.ActionListener() {
+        Nombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTareaActionPerformed(evt);
+                NombreActionPerformed(evt);
             }
         });
 
-        lblFecha.setText("Fecha Entragada");
+        EtiquetaTarea.setFont(new java.awt.Font("Roboto Medium", 2, 18)); // NOI18N
+        EtiquetaTarea.setText("Tarea");
 
-        txtFecha.addActionListener(new java.awt.event.ActionListener() {
+        Tarea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFechaActionPerformed(evt);
+                TareaActionPerformed(evt);
             }
         });
 
-        btnCancelar.setText("Cancelar");
+        EtiquetaFecha.setFont(new java.awt.Font("Roboto Medium", 2, 18)); // NOI18N
+        EtiquetaFecha.setText("Fecha Entragada");
 
+        Fecha.setForeground(new java.awt.Color(153, 153, 153));
+        Fecha.setText("AAAA/MM/DD");
+        Fecha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FechaMouseClicked(evt);
+            }
+        });
+        Fecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FechaActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setBackground(new java.awt.Color(0, 0, 102));
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
+        btnGuardar.setBackground(new java.awt.Color(0, 255, 51));
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblFecha)
-                    .addComponent(lblTarea, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNombre)
-                    .addComponent(lblId))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                        .addComponent(txtNombre)
-                        .addComponent(txtTarea)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnCancelar)
+        btnCancelar1.setBackground(new java.awt.Color(204, 204, 204));
+        btnCancelar1.setText("Cancelar");
+        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelar1ActionPerformed(evt);
+            }
+        });
+
+        EtiquetaGestorTareas.setFont(new java.awt.Font("Roboto Medium", 3, 36)); // NOI18N
+        EtiquetaGestorTareas.setForeground(new java.awt.Color(255, 255, 255));
+        EtiquetaGestorTareas.setText("Gestor De Tareas");
+        EtiquetaGestorTareas.setToolTipText("");
+
+        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
+        Fondo.setLayout(FondoLayout);
+        FondoLayout.setHorizontalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FondoLayout.createSequentialGroup()
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(EtiquetaTarea, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EtiquetaNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                            .addComponent(EtiquetaFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(EtiquetaID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnGuardar)))
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnMarcar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnEliminar)
-                            .addComponent(btnEditar))
-                        .addGap(26, 26, 26)))
-                .addGap(16, 16, 16))
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Nombre, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                            .addComponent(Tarea)
+                            .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ID)))
+                    .addGroup(FondoLayout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(btnCancelar1)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnGuardar))
+                    .addComponent(EtiquetaGestorTareas, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
+                        .addComponent(btnSalir)
+                        .addGap(35, 35, 35))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(FondoLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                                .addGap(33, 33, 33))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
+                                .addComponent(btnMarcar)
+                                .addContainerGap())))))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblId)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblNombre)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        FondoLayout.setVerticalGroup(
+            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(FondoLayout.createSequentialGroup()
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FondoLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(btnEditar)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnEliminar)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTarea)
-                            .addComponent(txtTarea, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFecha)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancelar)
-                            .addComponent(btnGuardar)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEliminar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnMarcar)))))
-                .addGap(0, 9, Short.MAX_VALUE))
+                        .addComponent(btnMarcar))
+                    .addGroup(FondoLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(btnSalir)
+                .addGap(25, 25, 25))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(EtiquetaGestorTareas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EtiquetaID)
+                    .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EtiquetaNombre)
+                    .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(EtiquetaTarea)
+                    .addComponent(Tarea, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EtiquetaFecha))
+                .addGap(42, 42, 42)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnCancelar1))
+                .addGap(33, 33, 33))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 880, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 367, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTareaActionPerformed
+    private void TareaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TareaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTareaActionPerformed
+    }//GEN-LAST:event_TareaActionPerformed
 
-    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+    private void FechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FechaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtFechaActionPerformed
+    }//GEN-LAST:event_FechaActionPerformed
+
+    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
+        TablaTareas.clearSelection();
+        this.limpiarTXT();
+    }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void IDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+         String nombre = Nombre.getText();
+        String tarea = Tarea.getText();
+        String fecha = Fecha.getText();
+        
+        // Valida que no estén vacíos
+        if (nombre.isEmpty() || tarea.isEmpty() || fecha.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor completa todos los campos.");
+            return;
+        }
+        String fechaTexto = Fecha.getText();
+if (!fechaTexto.matches("\\d{4}/\\d{2}/\\d{2}")) {
+    JOptionPane.showMessageDialog(null, "Formato de fecha incorrecto. Debe ser AAAA/MM/DD.", "Error", JOptionPane.ERROR_MESSAGE);
+}
+
+        // Llama al método para agregar la tarea
+        agregarTarea(nombre, tarea, fecha);
+        
+        // Limpia los campos después de guardar
+        Nombre.setText("");
+        Tarea.setText("");
+        Fecha.setText("");
+         this.llenarTabla();
+
+        
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void FechaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FechaMouseClicked
+       Fecha.setText("");
+    }//GEN-LAST:event_FechaMouseClicked
+
+    private void NombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NombreActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int filaSeleccionada = TablaTareas.getSelectedRow();
+if (filaSeleccionada != -1) {
+    int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar esta tarea?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        int idTarea = Integer.parseInt(TablaTareas.getValueAt(filaSeleccionada, 0).toString());
+        eliminarTarea(idTarea);
+    }
+} else {
+    JOptionPane.showMessageDialog(null, "Seleccione una tarea para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+}
+this.llenarTabla();
+TablaTareas.clearSelection();
+        this.limpiarTXT();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,22 +382,24 @@ public class frmTareas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
+    private javax.swing.JLabel EtiquetaFecha;
+    private javax.swing.JLabel EtiquetaGestorTareas;
+    private javax.swing.JLabel EtiquetaID;
+    private javax.swing.JLabel EtiquetaNombre;
+    private javax.swing.JLabel EtiquetaTarea;
+    private javax.swing.JTextField Fecha;
+    private javax.swing.JPanel Fondo;
+    private javax.swing.JTextField ID;
+    private javax.swing.JTextField Nombre;
+    private javax.swing.JTable TablaTareas;
+    private javax.swing.JTextField Tarea;
+    private javax.swing.JButton btnCancelar1;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnMarcar;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JLabel lblFecha;
-    private javax.swing.JLabel lblId;
-    private javax.swing.JLabel lblNombre;
-    private javax.swing.JLabel lblTarea;
-    private javax.swing.JTextField txtFecha;
-    private javax.swing.JTextField txtId;
-    private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtTarea;
     // End of variables declaration//GEN-END:variables
 
     public List<Tareas> consultarTareasPendientes() {
@@ -284,73 +428,58 @@ public class frmTareas extends javax.swing.JFrame {
 
     return listaTareas; // Retorna la lista de tareas pendientes
 }
-//    // ⿢ AGREGAR UNA NUEVA TAREA
-//    public void agregarTarea(String nombreAsignatura, String tarea, String fechaEntrega) {
-//        String sql = "CALL AgregarTarea(?, ?, ?)";
-//        try (Connection con = ConexionDB.conectar();
-//             CallableStatement stmt = con.prepareCall(sql)) {
-//
-//            stmt.setString(1, nombreAsignatura);
-//            stmt.setString(2, tarea);
-//            stmt.setDate(3, Date.valueOf(fechaEntrega));
-//
-//            stmt.execute();
-//            System.out.println("Tarea agregada correctamente.");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    //  MODIFICAR UNA TAREA
-//    public void modificarTarea(int id, String nombreAsignatura, String tarea, String fechaEntrega) {
-//        String sql = "CALL ModificarTarea(?, ?, ?, ?)";
-//        try (Conexion con = ConexionDB.conectar();
-//             CallableStatement stmt = con.prepareCall(sql)) {
-//
-//            stmt.setInt(1, id);
-//            stmt.setString(2, nombreAsignatura);
-//            stmt.setString(3, tarea);
-//            stmt.setDate(4, Date.valueOf(fechaEntrega));
-//
-//            stmt.execute();
-//            System.out.println("Tarea modificada correctamente.");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    // ⿤ ELIMINAR UNA TAREA
-//    public void eliminarTarea(int id) {
-//        String sql = "CALL EliminarTarea(?)";
-//        try (Connection con = ConexionDB.conectar();
-//             CallableStatement stmt = con.prepareCall(sql)) {
-//
-//            stmt.setInt(1, id);
-//
-//            stmt.execute();
-//            System.out.println("Tarea eliminada correctamente.");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    //MARCAR UNA TAREA COMO ENTREGADA
-//    public void marcarTareaEntregada(int id) {
-//        String sql = "CALL MarcarTareaEntregada(?)";
-//        try (Connection con = ConexionDB.conectar();
-//             CallableStatement stmt = con.prepareCall(sql)) {
-//
-//            stmt.setInt(1, id);
-//
-//            stmt.execute();
-//            System.out.println("Tarea marcada como entregada.");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//    }
-//
-//}
+    // ⿢ AGREGAR UNA NUEVA TAREA 
+public void agregarTarea(String nombre, String tarea, String fecha) {
+    Connection con = null;
+    CallableStatement stmt = null;
+    
+    try {
+        // Obtiene la conexión usando tu clase Conexion
+        Conexion conexionBD = new Conexion();
+        con = conexionBD.conexion();
+        
+        // Convierte el String de fecha a formato Date para MySQL
+        java.sql.Date fechaSQL = java.sql.Date.valueOf(fecha.replace("/", "-"));
+        
+        // Prepara el llamado al Stored Procedure
+        stmt = con.prepareCall("{CALL sp_CrearTarea(?, ?, ?)}");
+        stmt.setString(1, nombre);
+        stmt.setString(2, tarea);
+        stmt.setDate(3, fechaSQL);
+        
+        // Ejecuta el SP
+        stmt.execute();
+        JOptionPane.showMessageDialog(null, "¡Tarea agregada exitosamente!");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al agregar tarea: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        // Cierra las conexiones
+        try {
+            if (stmt != null) stmt.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+public void eliminarTarea(int idTarea) {
+    try {
+        Connection con = new Conexion().conexion();
+        String sql = "DELETE FROM tareas WHERE ID = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, idTarea);
+        ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Tarea eliminada con éxito.");
+        con.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar tarea: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
     public void llenarTabla() {
         List<Tareas> listaTareas = this.consultarTareasPendientes();
-        DefaultTableModel modeloTabla = (DefaultTableModel) this.jTable1.getModel();
+        DefaultTableModel modeloTabla = (DefaultTableModel) this.TablaTareas.getModel();
         modeloTabla.setRowCount(0); // Limpiar la tabla antes de llenarla
 
         listaTareas.forEach(tarea -> {
@@ -365,10 +494,10 @@ public class frmTareas extends javax.swing.JFrame {
     }
    
     public void limpiarTXT() {
-        txtId.setText(null);
-        txtNombre.setText(null);
-        txtTarea.setText(null);
-        txtNombre.setText(null);
-        txtFecha.setText(null);
+        ID.setText(null);
+        Nombre.setText(null);
+        Tarea.setText(null);
+        Nombre.setText(null);
+        Fecha.setText(null);
     }
 }
