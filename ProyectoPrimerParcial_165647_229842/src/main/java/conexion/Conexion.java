@@ -18,9 +18,9 @@ public class Conexion {
 
     /*Datos del Servidor MYSQL*/
     String url = "jdbc:mysql://localhost:3306";
-    String nombreBD = "Tareas";
+    String nombreBD = "tareas";
     String usuario = "root";
-    String contra = "56234512";
+    String contra = "root";
     String driver = "com.mysql.jdbc.Driver";
 
     Connection conexion = null;
