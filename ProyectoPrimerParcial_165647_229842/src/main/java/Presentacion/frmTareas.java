@@ -622,11 +622,6 @@ public class frmTareas extends javax.swing.JFrame {
             return;
         }
 
-        if (!fecha.matches("\\d{4}/\\d{2}/\\d{2}")) {
-            JOptionPane.showMessageDialog(null, "Formato de fecha incorrecto. Debe ser AAAA/MM/DD.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         java.sql.Date fechaSQL;
         try {
             fechaSQL = java.sql.Date.valueOf(fecha.replace("/", "-"));
@@ -677,7 +672,7 @@ public class frmTareas extends javax.swing.JFrame {
 
         try {
             Connection con = new Conexion().conexion();
-            String sql = "UPDATE tareas SET entregada = 1 WHERE ID = ?";
+            String sql = "UPDATE tareas SET entrega = 1 WHERE ID = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idTarea); // Establece el ID de la tarea que se va a marcar como entregada
             int filasAfectadas = ps.executeUpdate();
